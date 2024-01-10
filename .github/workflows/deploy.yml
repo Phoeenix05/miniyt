@@ -34,6 +34,6 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "fair-pig-94"
+          project: "miniyt"
           entrypoint: "server/entry.deno.js" # 📝 Update the entrypoint if necessary
           root: "." # 📝 Update the root if necessary
