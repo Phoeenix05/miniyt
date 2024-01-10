@@ -13,8 +13,8 @@ export const head: DocumentHead = {
     title: 'MiniYT',
     meta: [
         {
-            name: 'description',
-            content: 'Qwik site description',
+            name: 'Minimal YT client',
+            content: 'Minimal YT client to manage your subscriptions',
         },
     ],
 };
