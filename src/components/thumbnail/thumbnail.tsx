@@ -21,12 +21,19 @@ export const Thumbnail = component$<ThumbnailProps>((props) => {
                 await nav(`/video-${videoId}`)
             }}
         >
-            <img src={thumbnailSrc} alt={`image not found: ${thumbnailSrc}`} />
+            <img
+                src={thumbnailSrc}
+                alt={`image not found: ${thumbnailSrc}`}
+                width={200}
+                height={112}
+            />
             <p class="text-lg font-semibold">{title}</p>
             {style == 'channelPage' ? (
                 <></>
             ) : (
-                <a>something with channel info: {channelId}</a>
+                <a href={`/channel-${channelId}`}>
+                    something with channel info: {channelId}
+                </a>
             )}
         </span>
     )

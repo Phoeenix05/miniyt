@@ -5,15 +5,18 @@ import { Thumbnail } from '~/components/thumbnail/thumbnail'
 
 export default component$(() => {
     const loc = useLocation()
-    const { id } = loc.params
     const videos: string[] = []
 
     return (
         <>
-            <ChannelBanner channelId={id} />
+            <ChannelBanner channelId={loc.params.id} />
             <div>
                 {videos.map((v) => (
-                    <Thumbnail videoId={id} style="channelPage" />
+                    <Thumbnail
+                        key={`thumbnail-${v}`}
+                        videoId={v}
+                        style="channelPage"
+                    />
                 ))}
             </div>
         </>
