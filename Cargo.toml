@@ -1,0 +1,17 @@
+[workspace]
+members = []
+resolver = "2"
+
+[package]
+name = "miniyt"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.7.4"
+reqwest = "0.11.24"
+serde = { version = "1.0.196", features = ["derive"] }
+tokio = { version = "1.36.0", features = ["macros", "rt-multi-thread"] }
+toml = "0.8.10"
+tower = "0.4.13"
+tower-http = { version = "0.5.1", features = ["cors", "trace", "fs"] }
