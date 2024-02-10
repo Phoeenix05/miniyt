@@ -14,9 +14,21 @@ pub struct Config {
 #[derive(Debug, serde::Deserialize, Clone)]
 pub struct Database {
     pub port: u16,
+    pub dev: DatabaseDev,
+}
+
+#[derive(Debug, serde::Deserialize, Clone)]
+pub struct DatabaseDev {
+    pub port: u16,
 }
 
 #[derive(Debug, serde::Deserialize, Clone)]
 pub struct Backend {
+    pub port: u16,
+    pub dev: BackendDev,
+}
+
+#[derive(Debug, serde::Deserialize, Clone)]
+pub struct BackendDev {
     pub port: u16,
 }

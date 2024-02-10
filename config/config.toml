@@ -1,7 +1,13 @@
 [database]
 port = 5020
 
+[database.dev]
+port = 5030
+
 [backend]
+port = 5000
+
+[backend.dev]
 port = 5010
 
 [user_agent]
