@@ -1,7 +1,12 @@
+use crate::utility::rts;
+
 pub fn load_config() -> Config {
-    let config_str = std::fs::read_to_string("config/config.toml").unwrap();
-    let config: Config = toml::from_str(&config_str).unwrap();
-    config
+    #[cfg(debug_assertions)]
+    let config_str = rts!("config/config.dev.toml");
+    #[cfg(not(debug_assertions))]
+    let config_str = rts!("config/config.toml");
+
+    toml::from_str(&config_str).unwrap()
 }
 
 #[derive(Debug, serde::Deserialize, Clone)]
@@ -14,21 +19,9 @@ pub struct Config {
 #[derive(Debug, serde::Deserialize, Clone)]
 pub struct Database {
     pub port: u16,
-    pub dev: DatabaseDev,
-}
-
-#[derive(Debug, serde::Deserialize, Clone)]
-pub struct DatabaseDev {
-    pub port: u16,
 }
 
 #[derive(Debug, serde::Deserialize, Clone)]
 pub struct Backend {
-    pub port: u16,
-    pub dev: BackendDev,
-}
-
-#[derive(Debug, serde::Deserialize, Clone)]
-pub struct BackendDev {
     pub port: u16,
 }

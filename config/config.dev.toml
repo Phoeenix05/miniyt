@@ -1,7 +1,9 @@
 [database]
+# port = 5520
 port = 5020
 
 [backend]
+# port = 5500
 port = 5010
 
 [user_agent]

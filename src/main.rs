@@ -5,11 +5,14 @@ use notify::RecursiveMode;
 use notify_debouncer_mini::new_debouncer;
 use tokio::net::TcpListener;
 use tower::ServiceBuilder;
-use tower_http::{cors::CorsLayer, trace::TraceLayer};
+use tower_http::{cors::CorsLayer, services::ServeDir, trace::TraceLayer};
 use tower_livereload::LiveReloadLayer;
 
 mod config;
 mod error;
+mod integration;
+mod routes;
+mod utility;
 
 #[tokio::main]
 async fn main() {
@@ -25,7 +28,8 @@ async fn main() {
 
     // –––––––––– router ––––––––––
     let app = Router::new()
-        .route("/", get(|| async { "hallo" }))
+        .nest_service("/", ServeDir::new("./web/dist"))
+        .nest("/api", Router::new().route("/", get(routes::search)))
         .layer(
             ServiceBuilder::new()
                 .layer(live_reload)
@@ -45,14 +49,11 @@ async fn main() {
 
     debouncer
         .watcher()
-        .watch(std::path::Path::new("./config"), RecursiveMode::Recursive)
+        .watch(std::path::Path::new("./web/dist"), RecursiveMode::Recursive)
         .unwrap();
 
     // –––––––––– serve ––––––––––
-    #[cfg(not(debug_assertions))]
     let (host, port) = ([127, 0, 0, 1], config.backend.port);
-    #[cfg(debug_assertions)]
-    let (host, port) = ([127, 0, 0, 1], config.backend.dev.port);
     log::debug!("{:?}, {}", host, port);
 
     let tcp_listener = TcpListener::bind(SocketAddr::from((host, port)))
