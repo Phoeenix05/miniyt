@@ -1,3 +1,1 @@
-pub async fn search() -> &'static str {
-    ""
-}
+pub mod api;

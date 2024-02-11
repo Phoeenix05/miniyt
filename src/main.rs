@@ -1,6 +1,13 @@
+mod config;
+mod data;
+mod error;
+mod integration;
+mod routes;
+mod utility;
+
 use std::net::SocketAddr;
 
-use axum::{http::Method, routing::get, Router};
+use axum::{http::Method, response::Redirect, routing::get, Router};
 use notify::RecursiveMode;
 use notify_debouncer_mini::new_debouncer;
 use tokio::net::TcpListener;
@@ -8,11 +15,7 @@ use tower::ServiceBuilder;
 use tower_http::{cors::CorsLayer, services::ServeDir, trace::TraceLayer};
 use tower_livereload::LiveReloadLayer;
 
-mod config;
-mod error;
-mod integration;
-mod routes;
-mod utility;
+use crate::routes::api;
 
 #[tokio::main]
 async fn main() {
@@ -28,8 +31,20 @@ async fn main() {
 
     // –––––––––– router ––––––––––
     let app = Router::new()
-        .nest_service("/", ServeDir::new("./web/dist"))
-        .nest("/api", Router::new().route("/", get(routes::search)))
+        // routes
+        .nest("/api", Router::new())
+        .nest(
+            "/api/channel",
+            Router::new().route("/:cuid", get(api::channel::by_cuid)),
+        )
+        // static content
+        .nest_service(
+            "/",
+            ServeDir::new("./web/dist")
+                // fixes page reload issues
+                .fallback(get(|| async { Redirect::to("/") })),
+        )
+        // layers
         .layer(
             ServiceBuilder::new()
                 .layer(live_reload)
